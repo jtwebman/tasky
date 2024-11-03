@@ -1,0 +1,31 @@
+{
+  "name": "@tasky/eslint-config",
+  "version": "1.0.0",
+  "peerDependencies": {
+    "eslint": "^9.14.0",
+    "prettier": "3.3.3"
+  },
+  "scripts": {
+    "prebuild": "npm run clean",
+    "build": "tsc --build tsconfig.build.json",
+    "clean": "tsc --build tsconfig.build.json --clean",
+    "postclean": "rimraf dist",
+    "format": "prettier --write src/",
+    "lint": "eslint src/"
+  },
+  "author": "",
+  "license": "MIT",
+  "description": "",
+  "devDependencies": {
+    "@eslint/js": "^9.14.0",
+    "@types/eslint__js": "^8.42.3",
+    "@types/eslint-config-prettier": "^6.11.3",
+    "eslint": "^9.14.0",
+    "eslint-config-prettier": "^9.1.0",
+    "typescript": "^5.6.3",
+    "typescript-eslint": "^8.12.2"
+  },
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js"
+}
