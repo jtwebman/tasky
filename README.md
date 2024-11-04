@@ -1,6 +1,6 @@
 # A simple JIRA software engineer open source replacer....One Day
 
-Todo List (Will add to app once runing):
+Todo List (Will add to app once running):
 
 - Get monorepo with React / TypeScript / Node API / Shared Libraries with ESLint Working
 - Add in testing framework
