@@ -1,0 +1,29 @@
+{
+  "name": "@tasky/web",
+  "version": "1.0.0",
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.3",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.14",
+    "globals": "^15.11.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "vite": "^5.4.10"
+  },
+  "scripts": {
+    "dev": "vite",
+    "prebuild": "npm run clean",
+    "build": "tsc --build tsconfig.build.json && vite build",
+    "clean": "tsc --build tsconfig.build.json --clean",
+    "postclean": "rimraf dist",
+    "format": "prettier --write src/",
+    "lint": "eslint src/"
+  },
+  "author": "",
+  "license": "MIT",
+  "description": "",
+  "private": true,
+  "type": "module"
+}

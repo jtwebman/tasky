@@ -1,7 +1,6 @@
 {
-  "extends": "../../tsconfig-base.json",
+  "extends": "../../tsconfig-react.json",
   "compilerOptions": {
-    "composite": true,
     "outDir": "./dist",
     "rootDir": "./src"
   },
