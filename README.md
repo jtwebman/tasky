@@ -2,7 +2,7 @@
 
 Todo List (Will add to app once running):
 
-- Get monorepo with React / TypeScript / Node API / Shared Libraries with ESLint Working
+- ~~Get monorepo with React / TypeScript / Node API / Shared Libraries with ESLint Working~~
 - Add in testing framework
 - Setup Docker with Postgres DB
 - Get signup Working with Accounts (Username Password / Google / Github) (This will include event sourcing to supprot local fist)
