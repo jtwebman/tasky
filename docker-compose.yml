@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: root-user
+      POSTGRES_PASSWORD: password123!
+      PGPASSWORD: password123!
+    healthcheck:
+      test: ['CMD', '/health-check.sh', 'postgres', 'root-user', 'password123!']
+      interval: 15s
+      timeout: 10s
+      retries: 20
+    ports:
+      - '15432:5432'
+    tty: true
+    volumes:
+      - ./db/health-check.sh:/health-check.sh
+      - ./db/postgresql.conf:/etc/postgresql.conf
+    tmpfs:
+      - /var/lib/postgresql/data

@@ -9,7 +9,8 @@
     "clean": "tsc --build tsconfig.build.json --clean",
     "postclean": "rimraf dist",
     "format": "prettier --write src/",
-    "lint": "eslint src/"
+    "lint": "eslint src/",
+    "db:migrations": "tsx src/db/run-migrations.ts"
   },
   "author": "",
   "license": "MIT",
@@ -19,12 +20,15 @@
   "dependencies": {
     "@tasky/logger": "^1.0.0",
     "app-root-path": "^3.1.0",
+    "async-retry": "^1.3.3",
     "express": "^4.21.1",
+    "pg-promise": "^11.10.1",
     "stoppable": "^1.1.0",
     "uuid": "^11.0.2"
   },
   "devDependencies": {
     "@tasky/eslint-config": "^1.0.0",
+    "@types/async-retry": "^1.4.9",
     "@types/express": "^5.0.0",
     "@types/node": "^22.8.6",
     "@types/stoppable": "^1.1.3",
