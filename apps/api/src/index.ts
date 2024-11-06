@@ -3,7 +3,8 @@ import stoppable from 'stoppable';
 import { getLogger } from '@tasky/logger';
 import { getConfig } from './config';
 import { getContext } from './context';
-import { getApp } from './app';
+import { getHttpApp } from './http';
+import { getDB } from './db/db';
 
 const killSignals = {
   SIGHUP: 1,
@@ -13,11 +14,15 @@ const killSignals = {
 
 getConfig()
   .then((config) => {
-    return getContext(config, getLogger(config.name, config.version, config.logLevel));
+    return getContext(
+      config,
+      getLogger(config.name, config.version, config.logLevel),
+      getDB(config.postgresDbUrl, config.postgresDbPoolSize),
+    );
   })
   .then((context) => {
     const nodeApp = stoppable(
-      getApp(context).listen(context.config.port, () =>
+      getHttpApp(context).listen(context.config.port, () =>
         context.logger.info(`Node app listening on port ${context.config.port}!`),
       ),
     );
