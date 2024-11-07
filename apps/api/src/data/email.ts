@@ -1,20 +1,12 @@
-import { generateId, ID } from './id';
-import { IDatabase } from '../db/db';
+import { Kysely } from 'kysely';
+import { generateId } from './id';
+import { NewEmails, EmailsId } from './types/public/Emails';
+import PublicSchema from './types/public/PublicSchema';
 
-export interface IDataEmail {
-  id: ID;
-  email: string;
-  verified: boolean;
-}
-
-export function insertEmail(db: IDatabase, userId: ID, email: string) {
-  const emailId = generateId();
-  return db
-    .getDb()
-    .one(
-      'INSERT INTO emails (id, user_id, email) VALUES ($1, $2, $3) ' +
-        'RETURNING id, user_id as "userId", email, email_verified as emailVerified, ' +
-        'created_at as "createdAt", updated_at as "updatedAt"',
-      [emailId, userId, email],
-    );
+export function insertEmail(db: Kysely<PublicSchema>, data: Omit<NewEmails, 'id'>) {
+  const insertData = {
+    id: generateId<EmailsId>(),
+    ...data,
+  };
+  return db.insertInto('emails').values(insertData).returningAll().executeTakeFirstOrThrow();
 }

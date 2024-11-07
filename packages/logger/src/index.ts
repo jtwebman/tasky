@@ -68,6 +68,7 @@ export interface ILogger {
    * @returns - Returns the hidden logger under the hood.
    */
   getLogger: () => any;
+  end: () => void;
 }
 
 export type LoggerMiddleware = (req: RequestWithLogger, res: ResponseLoggable, next: NextFunction) => void;
@@ -93,6 +94,7 @@ function wrapLogger(logger: pino.Logger<never, boolean>): ILogger {
       return logger.error(extra, error);
     },
     getLogger: () => logger,
+    end: () => logger.flush(),
   };
 }
 

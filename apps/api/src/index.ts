@@ -1,4 +1,3 @@
-import fs from 'node:fs';
 import stoppable from 'stoppable';
 import { getLogger } from '@tasky/logger';
 import { getConfig } from './config';
@@ -28,9 +27,10 @@ getConfig()
     );
 
     function shutdown(signal: 'SIGHUP' | 'SIGINT' | 'SIGTERM', value: number) {
-      console.log(`Trying shutdown by got ${signal}`);
+      context.logger.info(`Trying shutdown by got ${signal}`);
       nodeApp.stop(() => {
-        console.log('Node app stopped.');
+        context.logger.info('Node app stopped.');
+        context.logger.end();
         process.exit(128 + value);
       });
     }

@@ -1,7 +1,5 @@
 import { v7 as uuidV7 } from 'uuid';
 
-export type ID = string;
-
-export function generateId(): ID {
-  return uuidV7();
+export function generateId<T extends string>(): T {
+  return uuidV7() as T;
 }
