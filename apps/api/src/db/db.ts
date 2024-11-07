@@ -13,7 +13,7 @@ export interface IConnectionOptions {
   fallback_application_name?: string;
 }
 
-export function waitDBConnect(sql: postgres.Sql<{}>, retries: number = 6): Promise<postgres.Sql<{}>> {
+export function waitDBConnect(sql: postgres.Sql<{}>, retries: number = 6) {
   return retry(
     async () => {
       await sql<any>`select 1 as result`;
