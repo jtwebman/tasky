@@ -1,12 +1,33 @@
-import { Kysely } from 'kysely';
 import { generateId } from './id';
-import { NewLogins, LoginsId } from './types/public/Logins';
-import PublicSchema from './types/public/PublicSchema';
+import postgres from 'postgres';
+import { UserId } from './user';
 
-export function insertLogin(db: Kysely<PublicSchema>, data: Omit<NewLogins, 'id'>) {
-  const insertData = {
-    id: generateId<LoginsId>(),
-    ...data,
-  };
-  return db.insertInto('logins').values(insertData).returningAll().executeTakeFirstOrThrow();
+export type LoginId = string & { __brand: 'LoginId' };
+
+export interface ILogin {
+  readonly id: LoginId;
+  readonly userId: UserId;
+  readonly username: string;
+  readonly password: string;
+}
+
+/**
+ * Add a user login
+ * @param sql - postgres sql
+ * @param userId - User ID
+ * @param username - username
+ * @param password - password hash
+ * @returns - The new login ID
+ */
+export async function addUserLogin(sql: postgres.Sql<{}>, userId: UserId, username: string, password: string) {
+  const loginId = generateId<LoginId>();
+  await sql`INSERT INTO logins (id, user_id, username, password) VALUES (${loginId}, ${userId}, ${username}, ${password})`;
+  return loginId;
+}
+
+export async function getUserLogin(sql: postgres.Sql<{}>, userId: UserId) {
+  const results = await sql<
+    readonly (ILogin | undefined)[]
+  >`SELECT id, user_id, username, password FROM logins WHERE user_id = ${userId}`;
+  return results.at(0);
 }
