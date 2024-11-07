@@ -10,8 +10,7 @@
     "postclean": "rimraf dist",
     "format": "prettier --write src/",
     "lint": "eslint src/",
-    "db:migrations": "tsx src/db/run-migrations.ts",
-    "gen:db:types": "npm run db:migrations && tsx src/data/gen-types.ts"
+    "db:migrations": "tsx src/db/run-migrations.ts"
   },
   "author": "",
   "license": "MIT",
