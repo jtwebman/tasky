@@ -51,7 +51,7 @@ export function userSignup(sql: postgres.Sql<{}>, data: ISignupData) {
     if (data.login) {
       await addUserLogin(tx, userId, data.login.username, data.login.password);
     }
-    return userId;
+    return getUser(tx, userId);
   });
 }
 
