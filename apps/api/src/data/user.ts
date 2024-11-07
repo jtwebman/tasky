@@ -1,6 +1,7 @@
 import { generateId } from './id';
 import { addEmailToUser, EmailId, getUserEmails, IEmail } from './email';
 import { addUserLogin, getUserLogin } from './login';
+
 import postgres from 'postgres';
 import { txIf } from './helpers';
 
@@ -47,7 +48,7 @@ export async function setUserPrimaryEmail(sql: postgres.Sql<{}>, id: UserId, ema
  * @param data - The data needed for signup supporting an option login (username password) vs just email link login
  * @returns - Returns the user
  */
-export function userSignup(sql: postgres.Sql<{}>, data: ISignupData) {
+export function signup(sql: postgres.Sql<{}>, data: ISignupData) {
   return txIf(sql, async (tx) => {
     const userId = generateId<UserId>();
     await sql`INSERT INTO users (id, first_name, last_name) VALUES (${userId}, ${data.firstName}, ${data.lastName || null})`;
