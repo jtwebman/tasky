@@ -41,6 +41,12 @@ export async function setUserPrimaryEmail(sql: postgres.Sql<{}>, id: UserId, ema
   await sql`UPDATE users SET primary_email_id = ${emailId} WHERE id = ${id}`;
 }
 
+/**
+ * Add data to the DB for user signup
+ * @param sql - postgres sql
+ * @param data - The data needed for signup supporting an option login (username password) vs just email link login
+ * @returns - Returns the user
+ */
 export function userSignup(sql: postgres.Sql<{}>, data: ISignupData) {
   return txIf(sql, async (tx) => {
     const userId = generateId<UserId>();
@@ -60,6 +66,12 @@ async function getUserData(sql: postgres.Sql<{}>, id: UserId) {
   return results.at(0) as IUserTable;
 }
 
+/**
+ * Get a user by ID
+ * @param sql - postgres sql
+ * @param id - User ID
+ * @returns - Returns a user if found else null
+ */
 export async function getUser(sql: postgres.Sql<{}>, id: UserId) {
   const [userdata, emailsData, login] = await Promise.all([
     getUserData(sql, id),

@@ -25,9 +25,15 @@ export async function addUserLogin(sql: postgres.Sql<{}>, userId: UserId, userna
   return loginId;
 }
 
+/**
+ * Get a user login by user ID
+ * @param sql - postgres sql
+ * @param userId - User ID
+ * @returns - Return the login or null
+ */
 export async function getUserLogin(sql: postgres.Sql<{}>, userId: UserId) {
   const results = await sql<
     readonly (ILogin | undefined)[]
   >`SELECT id, user_id, username, password FROM logins WHERE user_id = ${userId}`;
-  return results.at(0);
+  return results.at(0) || null;
 }

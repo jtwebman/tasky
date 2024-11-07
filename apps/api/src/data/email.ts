@@ -23,6 +23,12 @@ export async function addEmailToUser(sql: postgres.Sql<{}>, userId: UserId, emai
   return emailId;
 }
 
+/**
+ * Get list of user emails
+ * @param sql - postgres sql
+ * @param userId - user ID
+ * @returns - A email list
+ */
 export function getUserEmails(sql: postgres.Sql<{}>, userId: UserId) {
   return sql<IEmail[]>`SELECT id, email, verified FROM emails WHERE user_id = ${userId}`;
 }
