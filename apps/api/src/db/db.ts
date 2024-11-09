@@ -1,9 +1,5 @@
 import retry from 'async-retry';
-import Database from '../data/types/Database';
-import { Kysely, sql, CamelCasePlugin } from 'kysely';
-import { PostgresJSDialect } from 'kysely-postgres-js';
 import postgres from 'postgres';
-import PublicSchema from '../data/types/public/PublicSchema';
 
 export interface IConnectionOptions {
   host?: string;
@@ -17,11 +13,11 @@ export interface IConnectionOptions {
   fallback_application_name?: string;
 }
 
-export function waitDBConnect(db: Kysely<PublicSchema>, retries: number = 6): Promise<Kysely<PublicSchema>> {
+export function waitDBConnect(sql: postgres.Sql<{}>, retries: number = 6) {
   return retry(
     async () => {
-      await sql<any>`select 1 as result`.execute(db);
-      return db;
+      await sql<any>`select 1 as result`;
+      return sql;
     },
     {
       retries,
@@ -36,24 +32,16 @@ export function debug(_connection: number, query: string) {
 }
 
 export function getDB(connection: string | IConnectionOptions, maxConnection: number = 10) {
-  let dialect: PostgresJSDialect;
-
+  const commonSetting = {
+    max: maxConnection,
+    transform: postgres.camel,
+    debug,
+  };
   if (typeof connection !== 'string') {
-    dialect = new PostgresJSDialect({
-      postgres: postgres({
-        ...connection,
-        max: maxConnection,
-      }),
-    });
-  } else {
-    dialect = new PostgresJSDialect({
-      postgres: postgres(connection, {
-        max: maxConnection,
-      }),
+    return postgres({
+      ...connection,
+      ...commonSetting,
     });
   }
-  return new Kysely<Database>({
-    dialect,
-    plugins: [new CamelCasePlugin()],
-  });
+  return postgres(connection, commonSetting);
 }

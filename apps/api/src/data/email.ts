@@ -1,12 +1,34 @@
-import { Kysely } from 'kysely';
 import { generateId } from './id';
-import { NewEmails, EmailsId } from './types/public/Emails';
-import PublicSchema from './types/public/PublicSchema';
+import postgres from 'postgres';
+import { UserId } from './user';
 
-export function insertEmail(db: Kysely<PublicSchema>, data: Omit<NewEmails, 'id'>) {
-  const insertData = {
-    id: generateId<EmailsId>(),
-    ...data,
-  };
-  return db.insertInto('emails').values(insertData).returningAll().executeTakeFirstOrThrow();
+export type EmailId = string & { __brand: 'EmailId' };
+
+export interface IEmail {
+  readonly id: EmailId;
+  readonly email: string;
+  readonly verified: boolean;
+}
+
+/**
+ *
+ * @param sql Adds a email to a users email list and returns the email ID.
+ * @param userId - User ID to the email belongs too
+ * @param email - The email address
+ * @returns - Email ID
+ */
+export async function addEmailToUser(sql: postgres.Sql<{}>, userId: UserId, email: string) {
+  const emailId = generateId<EmailId>();
+  await sql`INSERT INTO emails (id, user_id, email) VALUES (${emailId}, ${userId}, ${email})`;
+  return emailId;
+}
+
+/**
+ * Get list of user emails
+ * @param sql - postgres sql
+ * @param userId - user ID
+ * @returns - A email list
+ */
+export function getUserEmails(sql: postgres.Sql<{}>, userId: UserId) {
+  return sql<IEmail[]>`SELECT id, email, verified FROM emails WHERE user_id = ${userId}`;
 }
